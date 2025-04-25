@@ -1,0 +1,84 @@
+﻿@{
+    ViewData["Title"] = "NFL Team Stats";
+}
+
+<h2>NFL Team Stats</h2>
+
+<form asp-action="FetchTeamData" method="post">
+    <label for="teamId">Enter Team ID (1-32):</label>
+    <input type="number" name="teamId" min="1" max="32" required />
+    <button type="submit">Fetch Data</button>
+</form>
+
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+{
+    <p style="color: red;">@ViewBag.ErrorMessage</p>
+}
+
+@if (Model != null && Model.Count > 0)
+{
+    <h3>
+        Game Stats for @ViewBag.TeamName:
+        @if (ViewBag.TeamImage != null)
+        {
+            <img src="~/images/@ViewBag.TeamImage" alt="@ViewBag.TeamName Logo"
+                 style="height: 40px; margin-left: 10px; vertical-align: middle;" />
+        }
+    </h3>
+
+    <p>Team Record: @ViewBag.TeamRecord</p>
+
+    <table border="1" cellpadding="5">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Opponent</th>
+                <th>Score</th>
+                <th>Result</th> <!-- New column for Win/Loss -->
+                <th>Pass Yds</th>
+                <th>Pass Comp</th>
+                <th>Pass Att</th>
+                <th>Rush Yds</th>
+                <th>Rush Att</th>
+                <th>First Downs</th>
+                <th>Time of Possession (Minutes)</th>
+                <th>Penalties</th>
+                <th>Penalty Yds</th>
+                <th>Fumbles Lost</th>
+                <th>Interceptions Thrown</th>
+                <th>3rd Down Att</th>
+                <th>3rd Down Conver</th>
+                <th>4th Down Att</th>
+                <th>4th Down Conver</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var stat in Model)
+            {
+                <tr>
+                    <td>@stat.Date</td>
+                    <td>@stat.Opponent</td>
+                    <td>@stat.Score</td>
+                    <td style="color: @(stat.Result == "W" ? "green" : stat.Result == "L" ? "red" : "black");">
+                        @stat.Result
+                    </td> <!-- Display Win/Loss with color -->
+                    <td>@stat.PassYards</td>
+                    <td>@stat.PassComp</td>
+                    <td>@stat.PassAtt</td>
+                    <td>@stat.RushYards</td>
+                    <td>@stat.RushAtt</td>
+                    <td>@stat.FirstDowns</td>
+                    <td>@stat.TimePossession</td>
+                    <td>@stat.Penalties</td>
+                    <td>@stat.penaltYds</td>
+                    <td>@stat.FumblesLost</td>
+                    <td>@stat.InterceptionsThrown</td>
+                    <td>@stat.ThirdDownAtt</td>
+                    <td>@stat.ThirdDownConver</td>
+                    <td>@stat.FourthDownAtt</td>
+                    <td>@stat.FourthDownConver</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
